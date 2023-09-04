@@ -14,7 +14,7 @@ class Advertisement(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, verbose_name='пользователь', on_delete=models.CASCADE)
-    image = models.ImageField("изображение", upload_to="advertisements/")
+    image = models.ImageField("изображение", upload_to="advertisements/", blank=True)
 
 
     def __str__(self):
@@ -47,7 +47,5 @@ class Advertisement(models.Model):
     def image_display(self):
         if self.image:
             return format_html(
-                '<img scr"{}" style="width: 55px;">', self.image.url
+                '<img scr"{}" style="width: 55px; height: 55px">', self.image.url
             )
-        else:
-            return 'No Image'
