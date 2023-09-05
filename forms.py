@@ -1,22 +1,17 @@
 from django import forms
-from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
-from .models import Advertisement
+User = get_user_model()
 
-class AdvertisementForm(forms.ModelForm):
+class ExtendedUserCreationForm(UserCreationForm):
     class Meta:
-        model = Advertisement
-        fields = ["title", "description", "image", "price", "auction"]
+        model = User
+        fields = ["username", "first_name", "last_name", "password1", "password2"]
         widgets = {
-            'title' : forms.TextInput(attrs={'class' : 'from-control form-control-lg'}),
-            'description' : forms.Textarea(attrs={'class' : 'form-control form-control-lg'}),
-            'price' : forms.NumberInput(attrs={'class' : 'form-control form-control-lg'}),
-            'auction' : forms.CheckboxInput(attrs={'class' : 'form-check-input'}),
-            'image' : forms.FileInput(attrs={'class' : 'from-control form-control-lg'})
+            'username' : forms.TextInput(attrs={'class' : 'from-control form-control-lg'}),
+            'first_name' : forms.TextInput(attrs={'class' : 'form-control form-control-lg'}),
+            'last_name' : forms.TextInput(attrs={'class' : 'form-control form-control-lg'}),
+            'password1' : forms.PasswordInput(attrs={'class' : 'from-control form-control-lg'}),
+            'password2' : forms.PasswordInput(attrs={'class' : 'from-control form-control-lg'})
         }
-
-    def clean_title(self):
-        title = self.cleaned_data['title']
-        if title.startswith('?'):
-            raise ValidationError('Заголовок не может начинаться с вопросительного знака.')
-        return title
